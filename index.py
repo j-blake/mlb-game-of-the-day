@@ -7,13 +7,15 @@ from string import Template
 
 class Index:
     _url = ''
+    _date = None
 
-    def __init__(self, url):
+    def __init__(self, url, date=datetime.date.today().isoformat()):
         self._url = url
+        self._date = date
 
     def run(self):
         resource = self.fetch_data()
-        data = self.prepare_data(resource)
+        data = self.prepare_data(resource, self._date)
         print(self.format_ranked_games(data))
 
     def fetch_data(self):
@@ -29,11 +31,11 @@ class Index:
             return None
 
     @staticmethod
-    def prepare_data(iterable):
+    def prepare_data(iterable, date):
         games = []
         try:
             for row in iterable:
-                if row['date'] != datetime.date.today().isoformat():
+                if row['date'] != date:
                     continue
                 game = {
                     'home': row['team1'],
