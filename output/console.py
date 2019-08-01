@@ -1,7 +1,9 @@
 from string import Template
 
+from output import Output
 
-class Console:
+
+class Console(Output):
     @staticmethod
     def format_ranked_games(games):
         if len(games) == 0:
