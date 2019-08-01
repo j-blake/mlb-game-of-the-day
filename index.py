@@ -62,13 +62,16 @@ class Index:
 
 
 if __name__ == "__main__":
-    module_name = sys.argv[1]
+    try:
+        module_name = sys.argv[1]
+    except IndexError:
+        module_name = 'console'
     try:
         module = importlib.import_module('output.' + str(module_name).lower())
         module_name = str(module_name).capitalize()
         output_class = getattr(module, module_name)
         instance = output_class()
-    except ModuleNotFoundError as err:
-        print('Something went wrong!\n---' + str(err) + '---\n\n')
+    except ModuleNotFoundError as module_error:
+        print('Something went wrong!\n---' + str(module_error) + '---\n\n')
         instance = output.Console()
     Index(instance).run()
