@@ -1,8 +1,10 @@
 import csv
+import importlib
 import urllib.error
 import requests
 import datetime
 from string import Template
+import sys
 
 import output
 
@@ -60,4 +62,13 @@ class Index:
 
 
 if __name__ == "__main__":
-    Index(output.Console()).run()
+    module_name = sys.argv[1]
+    try:
+        module = importlib.import_module('output.' + str(module_name).lower())
+        module_name = str(module_name).capitalize()
+        output_class = getattr(module, module_name)
+        instance = output_class()
+    except ModuleNotFoundError as err:
+        print('Something went wrong!\n---' + str(err) + '---\n\n')
+        instance = output.Console()
+    Index(instance).run()
